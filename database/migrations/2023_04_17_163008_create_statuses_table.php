@@ -12,15 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('email', 100)->unique();
-            $table->string('password', 100);
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->unsignedInteger('id')->primary();
+            $table->string('name', 50);
             $table->timestamps();
             $table->softDeletes();
-
         });
-        DB::statement('ALTER TABLE users MODIFY COLUMN id INT(12) UNSIGNED NOT NULL AUTO_INCREMENT;');
+
+        DB::statement('ALTER TABLE statuses MODIFY COLUMN id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;');
+
     }
 
     /**
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('statuses');
     }
 };
