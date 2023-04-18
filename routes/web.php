@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\RegisterUserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('{any}', function () {
     return view('welcome');
-});
+})->where('any', '.*');
 
 // include an authentication for the pages
 
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
