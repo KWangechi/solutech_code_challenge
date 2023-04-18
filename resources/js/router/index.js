@@ -1,12 +1,16 @@
-import { createWebHistory, createRouter } from 'vue-router'
-// import store from '@/store'
+import { createWebHistory, createRouter } from "vue-router";
+import { useUsers } from "../store/users";
 
-const ExampleComponent = () => import('../components/ExampleComponent.vue')
-const Dashboard = () => import('../components/Dashboard.vue')
+// const ExampleComponent = () => import("../components/ExampleComponent.vue");
 
-const Login = () => import('../components/auth/Login.vue')
-const Register = () => import('../components/auth/Register.vue')
+const Login = () => import("../components/auth/Login.vue");
+const Register = () => import("../components/auth/Register.vue");
 
+const Dashboard = () => import("../components/Dashboard.vue");
+const StatusIndex = () => import("../components/status/Index.vue");
+
+
+// const useStore = useUsers();
 
 // /* Guest Component */
 // const Login = () => import('@/components/Login.vue')
@@ -21,51 +25,88 @@ const Register = () => import('../components/auth/Register.vue')
 // const Dashboard = () => import('@/components/Dashboard.vue')
 // /* Authenticated Component */
 
-
 const routes = [
-    {
-        name: "example",
-        path: "/",
-        component: ExampleComponent,
-
-    },
-    {
-        name: "dashboard",
-        path: "/dashboard",
-        component: Dashboard,
-    },
     {
         name: "login",
         path: "/login",
         component: Login,
+        meta: {
+            middleware: "guest",
+            title: `Login`,
+        },
     },
     {
         name: "register",
         path: "/register",
         component: Register,
-    }
+        meta: {
+            middleware: "guest",
+            title: `Register`,
+        },
+    },
+    {
+        name: "dashboard",
+        path: "/dashboard",
+        component: Dashboard,
+        meta: {
+            title: `Users Dashboard`
+        }
+    },
+    {
+        name: "status",
+        path: "/status",
+        component: StatusIndex,
+        children: [
+            {
+                name: 'tasks_create',
+                path: '/create'
+            }
+        ],
 
-]
+        meta: {
+            title: `Status Dashboard`
+        }
+    },
+    // {
+    //     name: "tasks",
+    //     path: "/tasks",
+    //     component: TasksDashboard,
+    //     children: [
+    //         {
+    //             name: 'tasks_create',
+    //             path: '/create'
+    //         }
+    //     ],
+
+    //     meta: {
+    //         title: `Tasks Dashboard`
+    //     }
+    // },
+];
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
-})
+    routes,
+});
 
-// router.beforeEach((to, from, next) => {
-//     document.title = to.meta.title
-//     if (to.meta.middleware == "guest") {
-//         if (store.state.auth.authenticated) {
-//             next({ name: "dashboard" })
-//         }
-//         next()
-//     } else {
-//         if (store.state.auth.authenticated) {
-//             next()
-//         } else {
-//             next({ name: "login" })
-//         }
-//     }
-// })
+// protect the dashboard and example component pages
+router.beforeEach((to, from, next) => {
+    const useStore = useUsers();
 
-export default router
+    console.log(useStore.$state.userAuthenticated);
+    document.title = to.meta.title
+    if (to.meta.middleware == "guest") {
+        if (useStore.$state.userAuthenticated) {
+            next({ name: "example" })
+        }
+        next()
+    } else {
+        if (useStore.$state.userAuthenticated) {
+            next()
+        } else {
+            next({ name: "login" })
+        }
+    }
+});
+
+export default router;

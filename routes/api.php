@@ -22,9 +22,10 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/register', [RegisterUserController::class, 'createUser'])->name('user.register');
     Route::post('auth/login', [RegisterUserController::class, 'loginUser'])->name('user.login');
 
-    Route::get('users', [RegisterUserController::class, 'getUsers'])->name('user.users');
 
     Route::middleware('auth:sanctum')->group(function () {
+        
+        Route::get('users', [RegisterUserController::class, 'getUsers'])->name('user.users');
 
         // Status CRUD
         // Route::apiResource('/v1/status', StatusController::class);

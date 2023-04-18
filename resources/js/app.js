@@ -4,13 +4,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import './bootstrap';
-import '../sass/app.scss';
+import "./bootstrap";
+import "../sass/app.scss";
 
-import { createApp } from 'vue';
-import Router from '@/router'
-
-
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import Router from "@/router";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -19,9 +20,11 @@ import Router from '@/router'
  */
 
 const app = createApp({});
+const store = createPinia();
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+// import ExampleComponent from "./components/ExampleComponent.vue";
+
+// app.component("example-component", ExampleComponent);
 
 /**
  * The following block of code may be used to automatically register your
@@ -40,5 +43,10 @@ app.component('example-component', ExampleComponent);
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-app.use(Router)
-app.mount('#app');
+
+
+
+app.use(VueSweetalert2);
+app.use(Router);
+app.use(store);
+app.mount("#app");

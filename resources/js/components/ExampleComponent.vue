@@ -9,26 +9,28 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <router-link :to="{name:'example'}" class="nav-link">Home(current) <span class="sr-only"></span></router-link>
+                            <router-link :to="{name:'example'}" class="nav-link">Users Dashboard(current) <span class="sr-only"></span></router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{name:'dashboard'}" class="nav-link">Dashboard <span class="sr-only"></span></router-link>
+                            <router-link :to="{name:'login'}" class="nav-link">Tasks</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{name:'login'}" class="nav-link">Login</router-link>
+                            <router-link :to="{name:'register'}" class="nav-link">Statuses <span class="sr-only"></span></router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{name:'register'}" class="nav-link">Register <span class="sr-only"></span></router-link>
+                            <router-link :to="{name:'register'}" class="nav-link">User Tasks <span class="sr-only"></span></router-link>
                         </li>
                     </ul>
                     <div class="d-flex">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ user.email }}
+
 
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="javascript:void(0)">Logout</a>
+                                    <button class="dropdown-item" @click.prevent="logout">Logout</button>
                                 </div>
                             </li>
                         </ul>
@@ -41,3 +43,28 @@
         </main>
     </div>
 </template>
+
+<script>
+import { mapState } from 'pinia';
+import { useUsers } from '../store/users';
+
+const userStore = useUsers()
+
+export default {
+    data() {
+        return {
+            user: userStore.getUser
+        }
+    },
+
+    created () {
+        console.log(userStore.getLoggedInUser());
+    },
+    methods: {
+        logout() {
+            console.log('Logout the user');
+        }
+    }
+
+}
+</script>
