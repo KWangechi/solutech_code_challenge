@@ -15,12 +15,14 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "@smartweb/vue-flash-message": "^1.0.0-alpha.12",
         "@vitejs/plugin-vue": "^4.1.0",
         "lodash": "^4.17.21",
         "pinia": "^2.0.34",
         "vue": "^3.2.36",
         "vue-loader": "^17.0.1",
         "vue-router": "^4.1.6",
-        "vue-sweetalert2": "^5.0.5"
+        "vue-sweetalert2": "^5.0.5",
+        "vue3-toastify": "^0.1.7"
     }
 }

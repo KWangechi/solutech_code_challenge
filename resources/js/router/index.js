@@ -7,6 +7,7 @@ const Login = () => import("../components/auth/Login.vue");
 const Register = () => import("../components/auth/Register.vue");
 
 const Dashboard = () => import("../components/Dashboard.vue");
+const Users = () => import("../components/users/Index.vue")
 const StatusIndex = () => import("../components/status/Index.vue");
 
 
@@ -50,22 +51,30 @@ const routes = [
         component: Dashboard,
         meta: {
             title: `Users Dashboard`
-        }
-    },
-    {
-        name: "status",
-        path: "/status",
-        component: StatusIndex,
+        },
         children: [
             {
-                name: 'tasks_create',
-                path: '/create'
-            }
-        ],
+                name: 'users',
+                path: '/users',
+                component: Users
+            },
 
-        meta: {
-            title: `Status Dashboard`
-        }
+            {
+                name: "status",
+                path: "/status",
+                component: StatusIndex,
+                children: [
+                    {
+                        name: 'tasks_create',
+                        path: '/create'
+                    }
+                ],
+
+                meta: {
+                    title: `Status Dashboard`
+                }
+            },
+        ]
     },
     // {
     //     name: "tasks",

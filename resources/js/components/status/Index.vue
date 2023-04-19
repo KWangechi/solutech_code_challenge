@@ -3,9 +3,15 @@
 </template>
 
 <script lang="js">
+import Navigation from '../layouts/Navigation.vue';
 export default {
-    setup() {
-
+    components: {
+        Navigation
     },
+    data() {
+        return {
+
+        }
+    }
 }
 </script>

@@ -20,7 +20,15 @@
                             <router-link
                                 :to="{ name: 'dashboard' }"
                                 class="nav-link"
-                                >Users Dashboard(current)
+                                >Dashboard(current)
+                                <span class="sr-only"></span
+                            ></router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link
+                                :to="{ name: 'users' }"
+                                class="nav-link"
+                                >Users
                                 <span class="sr-only"></span
                             ></router-link>
                         </li>
@@ -79,30 +87,8 @@
         </nav>
         <main class="mt-3">
             <router-view></router-view>
-            <br>
-            <br>
-            <div class="tables mt-8">
-                <table class="table table-bordered table-responsive">
-                    <thead>
-                        <tr>
-                            <th class="col">ID</th>
-                            <th class="col">Email</th>
-                            <th class="col">Created At</th>
-                            <th class="col">Updated At</th>
-                            <th class="col">Deleted At</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="users.length > 0">
-                        <tr v-for="(user, index) in users" :key="index">
-                            <td>{{ user.id }}</td>
-                            <td class="table-secondary">{{ user.email }}</td>
-                            <td class="table-success">{{ user.created_at }}</td>
-                            <td class="table-danger">{{ user.updated_at }}</td>
-                            <td class="table-warning">{{ user.deleted_at }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+
         </main>
     </div>
 </template>
