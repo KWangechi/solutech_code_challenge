@@ -50,11 +50,11 @@ export const useUsers = defineStore("user-store", {
             if (res.data.status === 201) {
                 toast.success(res.data.message, {});
 
-
                 this.userAuthenticated = true;
                 this.user = res.data.data;
 
                 router.push("/login");
+
             } else {
                 toast.error(res.data.message, {});
 
@@ -96,4 +96,4 @@ export const useUsers = defineStore("user-store", {
     },
 });
 
-// export default useUsers;
+

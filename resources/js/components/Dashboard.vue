@@ -2,7 +2,6 @@
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <!-- <a class="navbar-brand" href="https://techvblogs.com/blog/spa-authentication-laravel-9-sanctum-vue3-vite" target="_blank">TechvBlogs</a> -->
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -46,13 +45,12 @@
                                 >Statuses <span class="sr-only"></span
                             ></router-link>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <router-link
-                                :to="{ name: 'register' }"
                                 class="nav-link"
                                 >User Tasks <span class="sr-only"></span
                             ></router-link>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="d-flex">
                         <ul class="navbar-nav">
@@ -87,8 +85,6 @@
         </nav>
         <main class="mt-3">
             <router-view></router-view>
-
-
         </main>
     </div>
 </template>

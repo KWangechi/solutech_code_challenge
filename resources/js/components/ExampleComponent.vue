@@ -9,11 +9,11 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <router-link :to="{name:'example'}" class="nav-link">Users Dashboard(current) <span class="sr-only"></span></router-link>
+                            <router-link :to="{name:'dashboard'}" class="nav-link">Users Dashboard(current) <span class="sr-only"></span></router-link>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <router-link :to="{name:'login'}" class="nav-link">Tasks</router-link>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <router-link :to="{name:'register'}" class="nav-link">Statuses <span class="sr-only"></span></router-link>
                         </li>
