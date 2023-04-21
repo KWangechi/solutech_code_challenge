@@ -22,15 +22,17 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/register', [RegisterUserController::class, 'createUser'])->name('user.register');
     Route::post('auth/login', [RegisterUserController::class, 'loginUser'])->name('user.login');
 
+    Route::get('auth/logout', [RegisterUserController::class, 'logout'])->name('user.logout');
 
     Route::middleware('auth:sanctum')->group(function () {
-        
+
         Route::get('users', [RegisterUserController::class, 'getUsers'])->name('user.users');
 
         // Status CRUD
         // Route::apiResource('/v1/status', StatusController::class);
         Route::get('status', [StatusController::class, 'index']);
         Route::post('status', [StatusController::class, 'store']);
+        Route::get('status/{id}', [StatusController::class, 'edit']);
         Route::patch('status/{id}', [StatusController::class, 'update']);
         Route::delete('status/{id}', [StatusController::class, 'destroy']);
 
@@ -49,7 +51,6 @@ Route::prefix('v1')->group(function () {
         Route::post('user_tasks', [UserTaskController::class, 'store']);
         Route::patch('user_tasks/{id}', [UserTaskController::class, 'update']);
         Route::delete('user_tasks/{id}', [UserTaskController::class, 'destroy']);
-
     });
 });
 

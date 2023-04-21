@@ -5,72 +5,73 @@ import router from "../../router";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
 
-export const useStatuses = defineStore("status-store", {
+export const useTasks = defineStore("tasks-store", {
     state: () => {
         return {
-            statuses: [],
-            status: "",
+            tasks: [],
+            task: "",
             errors: "",
         };
     },
 
     getters: {
-        allStatuses(state) {
-            return state.statuses;
+        allTasks(state) {
+            return state.tasks;
         },
 
         getErrors(state) {
             return state.errors;
         },
-        getStatus(state) {
-            return state.status;
+        getTask(state) {
+            return state.task;
         },
     },
 
     actions: {
-        async fetchAllStatuses() {
+        async fetchAllTasks() {
             await axios.get("/sanctum/csrf-cookie");
-            const response = await axios.get("/api/v1/status");
+            const response = await axios.get("/api/v1/tasks");
             try {
-                this.statuses = response.data.data;
-                return this.statuses;
+                this.tasks = response.data.data;
+                return this.tasks;
             } catch (err) {
-                this.statuses = [];
-                console.error("Error fetching users:", err);
+                this.tasks = [];
+                console.error("Error fetching tasks:", err);
                 return err;
             }
         },
 
-        async createNewStatus(status) {
+        async createNewTask(task) {
             await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/api/v1/status", status, {});
+            const res = await axios.post("/api/v1/tasks", task, {});
+
 
             if (res.data.status) {
                 toast.success(res.data.message, {
                     position: "top-center",
-                    pauseOnHover: false,
+                    pauseOnHover: false
                 });
 
-                this.status = res.data.data;
-                this.statuses.push(this.status);
+                this.task = res.data.data;
+                this.tasks.push(this.task);
 
-                console.log(this.status);
-                router.push("/status");
+                console.log(this.tasks);
+                router.push("/tasks");
             } else {
                 toast.error(res.data.message, {});
                 this.errors = res.data.message;
             }
         },
 
-        async editStatus(status) {
+        async editTask(task) {
             await axios.get("/sanctum/csrf-cookie");
 
-            const response = await axios.get(`/api/v1/status/${status.id}`, {});
+            const response = await axios.get(`/api/v1/task/${task.id}`, {});
             if (response.data.status) {
-                this.status = response.data.data;
+                this.task = response.data.data;
 
-                console.log(this.status);
-                router.push(`/status/edit/${this.status.id}`);
+                console.log(this.task);
+                router.push(`/task/edit/${this.task.id}`);
 
             } else {
                 console.log(response.data.message);
@@ -80,12 +81,12 @@ export const useStatuses = defineStore("status-store", {
             }
         },
 
-        async updateStatus(status) {
+        async updateTask(task) {
             await axios.get("/sanctum/csrf-cookie");
 
             const response = await axios.patch(
-                `/api/v1/status/${status.id}`,
-                status,
+                `/api/v1/status/${task.id}`,
+                task,
                 {}
             );
 
@@ -98,43 +99,53 @@ export const useStatuses = defineStore("status-store", {
                     pauseOnHover: false
                 });
 
-                router.push(`/status`);
+                router.push(`/tasks`);
 
             }
         },
 
-        async deleteStatus(id) {
+
+        async deleteTask(id) {
             await axios.get("/sanctum/csrf-cookie");
 
             Swal.fire({
-                title: "Status Deletion",
-                text: "Are you sure you want to delete this?",
-                icon: "error",
+                title: 'Task Deletion',
+                text: 'Are you sure you want to delete this?',
+                icon: 'error',
                 showCancelButton: true,
-                confirmButtonText: "Yes",
+                confirmButtonText: 'Yes',
             }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`/api/v1/status/${id}`).then((response) => {
+                if(result.isConfirmed) {
+
+                    axios.delete(`/api/v1/tasks/${id}`).then((response) => {
+
                         console.log(response.data);
 
-                        if (!response.data.status) {
+                        if(!response.data.status) {
                             toast.error(response.data.message, {
-                                position: "top-center",
-                            });
-                        } else {
-                            toast.success(response.data.message, {
-                                position: "top-center",
-                                pauseOnHover: false,
+                                position: 'top-center'
                             });
                         }
-                    });
+
+                        else {
+                            toast.success(response.data.message, {
+                                position: 'top-center',
+                                pauseOnHover: false
+
+                            });
+                        }
+                    })
+
                 }
 
-                this.fetchAllStatuses();
-            });
+                this.fetchAllTasks();
+              })
+
         },
+
         getLoggedInUser() {
             return this.user;
         },
     },
 });
+

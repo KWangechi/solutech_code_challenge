@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class StatusController extends Controller
@@ -21,13 +21,13 @@ class StatusController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Statuses not found!!!',
-                'status_code' => HttpFoundationResponse::HTTP_NOT_FOUND,
+                'status_code' => Response::HTTP_NOT_FOUND,
             ]);
         } else {
             return response()->json([
                 'status' => true,
                 'message' => 'Statuses Found!!!',
-                'status_code' => HttpFoundationResponse::HTTP_FOUND,
+                'status_code' => Response::HTTP_FOUND,
                 'data' => $statuses
             ]);
         }
@@ -60,14 +60,14 @@ class StatusController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Error while creating a new Status',
-                    'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                     'data' => $status
                 ]);
             } else {
                 return response()->json([
                     'status' => true,
                     'message' => 'Status creation successful!!!',
-                    'status_code' => HttpFoundationResponse::HTTP_CREATED,
+                    'status_code' => Response::HTTP_CREATED,
                     'data' => $status
                 ]);
             }
@@ -75,7 +75,7 @@ class StatusController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
-                'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
@@ -92,15 +92,14 @@ class StatusController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Status fetched successfully!',
-                'status_code' => HttpFoundationResponse::HTTP_FOUND,
+                'status_code' => Response::HTTP_FOUND,
                 'data' => $status
             ]);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
-                'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
@@ -110,7 +109,24 @@ class StatusController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+        try {
+            $status = Status::find($id);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Status Found',
+                'status_code' => Response::HTTP_FOUND,
+                'data' => $status
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'status_code' => Response::HTTP_NOT_FOUND,
+                'data' => $status
+            ]);
+        }
     }
 
     /**
@@ -129,23 +145,22 @@ class StatusController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Error while updating the status',
-                    'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                     'data' => $status
                 ]);
             } else {
                 return response()->json([
                     'status' => true,
                     'message' => 'Status Updated successfully!!',
-                    'status_code' => HttpFoundationResponse::HTTP_OK,
+                    'status_code' => Response::HTTP_OK,
                     'data' => $status
                 ]);
             }
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
-                'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
@@ -162,22 +177,21 @@ class StatusController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Error while deleting the status',
-                    'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 ]);
             } else {
                 return response()->json([
                     'status' => true,
                     'message' => 'Status Deleted successfully!!',
-                    'status_code' => HttpFoundationResponse::HTTP_OK
+                    'status_code' => Response::HTTP_OK
                 ]);
             }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
-                'status_code' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
-
     }
 }

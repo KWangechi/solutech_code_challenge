@@ -1,5 +1,5 @@
 <template>
-    <div class="container justify-center content-center">
+    <div class="container justify-center content-center mt-5">
         <div class="row h-100 align-items-center">
             <div class="col-12 col-md-6 offset-md-3">
                 <div class="card shadow sm ">

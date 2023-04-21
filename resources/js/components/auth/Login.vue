@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <div class="row align-items-center">
-            <div class="col-12 col-md-6 offset-md-3">
+            <div class="col-12 col-md-6 offset-md-3 ">
                 <div class="card shadow md">
                     <div class="card-body">
                         <h1 class="text-center">Login</h1>
@@ -77,8 +77,10 @@ export default {
                 email: "",
                 password: "",
             },
+
         };
     },
+    
     computed: {
         ...mapState(useUsers, {
             errors: 'errors'

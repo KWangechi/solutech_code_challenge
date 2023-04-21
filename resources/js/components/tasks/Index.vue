@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="col-12">
-      <div class="alert" v-if="!statuses">
+      <div class="alert" v-if="!tasks">
         <div class="alert alert-danger">No Data Yet</div>
         <button
           class="btn btn-primary btn-xl mt-2 mb-3 float-right"
-          data-bs-target="#createStatusModal"
+          data-bs-target="#createTaskModal"
           data-bs-toggle="modal"
         >
           <svg
@@ -20,18 +20,18 @@
               d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
             />
           </svg>
-          Create a new Task Status
+          Create a new Task
         </button>
       </div>
-      <div class="card" style="width: 100%" v-if="statuses.length !== 0">
+      <div class="card" style="width: 100%" v-else>
         <div class="card-title text-center">
-          <h1 class="mt-4">Statuses</h1>
+          <h1 class="mt-4">Tasks</h1>
         </div>
         <div class="card-body">
           <div class="tables mt-8">
             <button
               class="btn btn-primary btn-xl mt-2 mb-3 float-right"
-              data-bs-target="#createStatusModal"
+              data-bs-target="#createTaskModal"
               data-bs-toggle="modal"
             >
               <svg
@@ -46,7 +46,7 @@
                   d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
                 />
               </svg>
-              Create a new Task Status
+              Create a new Task
             </button>
             <table
               class="table table-bordered table-responsive table-hover table-striped text-center"
@@ -55,29 +55,26 @@
                 <tr>
                   <th class="col">ID</th>
                   <th class="col">Name</th>
-                  <th class="col">Created At</th>
-                  <th class="col">Updated At</th>
+                  <th class="col">Description</th>
+                  <th class="col">Due Date</th>
+                  <th class="col">Status ID</th>
                   <th class="col">EDIT</th>
                   <th class="col">DELETE</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(status, index) in statuses" :key="index">
-                  <td>{{ status.id }}</td>
-                  <td>
-                    {{ status.name }}
-                  </td>
-                  <td>
-                    {{ status.created_at }}
-                  </td>
-                  <td>
-                    {{ status.updated_at }}
-                  </td>
+                <tr v-for="(task, index) in tasks" :key="index">
+                  <td>{{ task.id }}</td>
+                  <td>{{ task.name }}</td>
+                  <td>{{ task.description }}</td>
+                  <td>{{ task.due_date }}</td>
+                  <td>{{ task.status_id }}</td>
+
                   <td>
                     <button
                       class="btn btn-secondary btn-sm"
                       type="button"
-                      @click.prevent="editStatus(status)"
+                      @click.prevent="editTask(task)"
                     >
                       EDIT
                     </button>
@@ -87,7 +84,7 @@
                       <button
                         class="btn btn-danger btn-sm"
                         type="button"
-                        @click="deleteStatus(status.id)"
+                        @click="deleteTask(task.id)"
                       >
                         DELETE
                       </button>
@@ -97,16 +94,15 @@
               </tbody>
             </table>
           </div>
-          <div></div>
         </div>
       </div>
 
-      <!-- create Status Modal -->
-      <div class="modal fade" id="createStatusModal" tabindex="-1" aria-hidden="true">
+      <!-- create Task Modal -->
+      <div class="modal fade" id="createTaskModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="createStatusLabel">Create a New Status</h5>
+              <h5 class="modal-title" id="createStatusLabel">Create a New Task</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -114,18 +110,58 @@
                 aria-label="Close"
               ></button>
             </div>
-            <form @submit.prevent="createNewStatus" class="form">
+            <form class="form" @submit.prevent="createNewTask">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="taskName" class="form-label">Status Name</label>
+                  <label for="taskName" class="form-label">Task Name</label>
                   <input
                     type="text"
                     class="form-control"
                     id="task_name"
-                    v-model="status.name"
+                    placeholder="e.g Bug Fixing"
+                    v-model="task.name"
                   />
                 </div>
+
+                <div class="mb-3">
+                  <label for="taskDescription" class="form-label">Description</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="task_description"
+                    placeholder="e.g a major bug in the Create User Module"
+                    v-model="task.description"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="taskDueDate" class="form-label">Due Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="task_dueDate"
+                    v-model="task.due_date"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="taskStatusId" class="form-label">Status ID</label>
+                  <select
+                    class="form-select"
+                    name="statusId"
+                    id="statusId"
+                    v-model="task.status_id"
+                  >
+                    <option
+                      v-for="(status, index) in statuses"
+                      :key="index"
+                      :value="status.id"
+                    >
+                      {{ status.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -153,46 +189,55 @@
 <script lang="js">
 import { mapState, mapActions } from 'pinia';
 import {useStatuses} from '../../store/status/index';
+import {useTasks} from '../../store/task/index'
 
-const statusStore = useStatuses();
+const tasksStore = useTasks()
 
 export default {
     data() {
         return {
-            status: {
-                name: ''
-            },
+            task: {
+                name: '',
+                description: '',
+                due_date: '',
+                status_id: ''
+            }
         }
     },
     computed: {
         ...mapState(useStatuses, {
             statuses: 'statuses'
+        }),
+        ...mapState(useTasks, {
+            tasks: 'allTasks'
         })
     },
 
     mounted() {
-        this.getAllStatuses();
+       this.getAllTasks();
     },
     methods: {
         ...mapActions(useStatuses, {
             getAllStatuses: 'fetchAllStatuses'
         }),
-        async createNewStatus() {
-            await statusStore.createNewStatus(this.status);
+
+        ...mapActions(useTasks, {
+            getAllTasks: 'fetchAllTasks'
+        }),
+
+        async createNewTask() {
+            await tasksStore.createNewTask(this.task);
+        },
+        async editTask(task) {
+            await tasksStore.editTask(task);
         },
 
-        async editStatus(status) {
-            await statusStore.editStatus(status)
+        async updateTask(updated_task) {
+            console.log(updated_task);
         },
 
-        async deleteStatus(id) {
-            await statusStore.deleteStatus(id);
-        },
-        async updateStatus(id){
-            console.log(id)
-        },
-        closeModal() {
-            this.isVisible = false;
+        async deleteTask(id) {
+            await tasksStore.deleteTask(id);
         }
     },
 }

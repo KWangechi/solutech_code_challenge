@@ -7,8 +7,15 @@ const Login = () => import("../components/auth/Login.vue");
 const Register = () => import("../components/auth/Register.vue");
 
 const Dashboard = () => import("../components/Dashboard.vue");
-const Users = () => import("../components/users/Index.vue")
+const Users = () => import("../components/users/Index.vue");
+
 const StatusIndex = () => import("../components/status/Index.vue");
+const StatusEdit = () => import("../components/status/Edit.vue")
+
+const Task = () => import("../components/tasks/Index.vue");
+const UserTask = () => import("../components/userTasks/Index.vue");
+const TaskEdit = () => import("../components/tasks/Edit.vue")
+
 
 
 // const useStore = useUsers();
@@ -50,13 +57,13 @@ const routes = [
         path: "/dashboard",
         component: Dashboard,
         meta: {
-            title: `Users Dashboard`
+            title: `Users Dashboard`,
         },
         children: [
             {
-                name: 'users',
-                path: '/users',
-                component: Users
+                name: "users",
+                path: "/users",
+                component: Users,
             },
 
             {
@@ -64,33 +71,47 @@ const routes = [
                 path: "/status",
                 component: StatusIndex,
                 children: [
-                    {
-                        name: 'tasks_create',
-                        path: '/create'
-                    }
                 ],
 
                 meta: {
-                    title: `Status Dashboard`
-                }
+                    title: `Status Dashboard`,
+                },
             },
-        ]
-    },
-    // {
-    //     name: "tasks",
-    //     path: "/tasks",
-    //     component: TasksDashboard,
-    //     children: [
-    //         {
-    //             name: 'tasks_create',
-    //             path: '/create'
-    //         }
-    //     ],
+            {
+                name: "status_edit",
+                path: "/status/edit/:id",
+                component: StatusEdit
+            },
+            {
+                name: "tasks",
+                path: "/tasks",
+                component: Task,
+                children: [],
 
-    //     meta: {
-    //         title: `Tasks Dashboard`
-    //     }
-    // },
+                meta: {
+                    title: `Task Dashboard`,
+                },
+            },
+            {
+                name: "tasks_edit",
+                path: "/task/edit/:id",
+                component: TaskEdit
+            },
+            {
+                name: "user_tasks",
+                path: "/user_tasks",
+                component: UserTask,
+                children: [
+
+                ],
+
+                meta: {
+                    title: `User Tasks Dashboard`,
+                },
+            }
+
+        ],
+    },
 ];
 
 const router = createRouter({
@@ -101,19 +122,22 @@ const router = createRouter({
 // protect the dashboard and example component pages
 router.beforeEach((to, from, next) => {
     const useStore = useUsers();
+    const authToken = localStorage.getItem('auth_token');
 
-    console.log(useStore.$state.userAuthenticated);
-    document.title = to.meta.title
+    document.title = to.meta.title;
+
+    console.log(authToken);
+
     if (to.meta.middleware == "guest") {
         if (useStore.$state.userAuthenticated) {
-            next({ name: "example" })
+            next({name: 'dashboard'});
         }
-        next()
+        next();
     } else {
         if (useStore.$state.userAuthenticated) {
-            next()
+            next();
         } else {
-            next({ name: "login" })
+            next({ name: "login" });
         }
     }
 });

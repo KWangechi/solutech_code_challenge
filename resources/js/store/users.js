@@ -47,10 +47,11 @@ export const useUsers = defineStore("user-store", {
             const res = await axios.post("/api/v1/auth/register", user, {});
 
             // use sweetalert to redirect to the next page
-            if (res.data.status === 201) {
+            if (res.data.status) {
                 toast.success(res.data.message, {});
 
                 this.userAuthenticated = true;
+                this.errors = '';
                 this.user = res.data.data;
 
                 router.push("/login");
@@ -67,22 +68,27 @@ export const useUsers = defineStore("user-store", {
 
             const res = await axios.post("/api/v1/auth/login", user, {});
 
-            if (res.data.status === 302) {
+            if (res.data.status) {
 
                 this.user = res.data.data;
                 this.userAuthenticated = true;
+                this.errors = '';
+
+                //store the token also
+                localStorage.setItem('auth_token', res.data.token);
+                console.log(localStorage.getItem('auth_token'));
 
                 toast.success(res.data.message, {});
 
                 console.log(this.user);
+
                 // redirect to the dashboard page
                 router.push("/dashboard");
+
             } else {
-                toast.error("Login error. Try again!", {});
+                toast.error(res.data.message, {});
 
                 this.errors = res.data.message;
-
-                console.log(this.errors);
             }
         },
 
@@ -91,7 +97,29 @@ export const useUsers = defineStore("user-store", {
         },
 
         async logoutUser() {
-            console.log("Logout the user");
+            await axios.get("/sanctum/csrf-cookie");
+
+            const res = await axios.get("/api/v1/auth/logout", {});
+
+            if (res.data.status) {
+
+                this.user = '';
+                this.userAuthenticated = false;
+
+                toast.success(res.data.message, {});
+
+                console.log(this.user);
+
+                // redirect to the dashboard page
+                router.push("/login");
+
+            } else {
+                toast.error(res.data.message, {});
+
+                this.errors = res.data.message;
+
+                console.log(this.errors);
+            }
         },
     },
 });

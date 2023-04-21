@@ -21,7 +21,6 @@ class Task extends Model
     ];
 
     // relationships
-
     public function status() {
         return $this->hasOne(Status::class. 'status_id');
     }

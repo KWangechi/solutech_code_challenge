@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response as FacadesResponse;
-use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegisterUserController extends Controller
 {
@@ -29,21 +27,24 @@ class RegisterUserController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'status' => HttpFoundationResponse::HTTP_REQUEST_TIMEOUT,
+                    'status' => false,
                     'message' => 'Error while creating new User!',
+                    'status_code' => Response::HTTP_REQUEST_TIMEOUT,
                     'data' => []
                 ]);
             } else {
                 return response()->json([
-                    'status' => HttpFoundationResponse::HTTP_CREATED,
+                    'status' => true,
                     'message' => 'New User Registered Successfully',
                     'token' => $user->createToken('api_token')->plainTextToken,
+                    'status_code' => Response::HTTP_CREATED,
                     'data' => $user
                 ]);
             }
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'status' => false,
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => $th->getMessage(),
             ]);
         }
@@ -62,48 +63,66 @@ class RegisterUserController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Email Address or Password not Found!! Try again',
-                    'status_code' => HttpFoundationResponse::HTTP_NOT_FOUND,
+                    'status_code' => Response::HTTP_NOT_FOUND,
                 ]);
-
             } else {
                 $user = User::where('email', $request->email)->first();
 
                 return response()->json([
-                    'status' => HttpFoundationResponse::HTTP_FOUND,
+                    'status' => true,
                     'message' => 'User Login Successful!',
                     'token' => $user->createToken('api_token')->plainTextToken,
+                    'status_code' => Response::HTTP_FOUND,
                     'data' => $user
                 ]);
-
             }
-
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'status' => false,
                 'message' => $th->getMessage(),
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ]);
         }
-        // dd($request);
     }
 
-    public function getUsers() {
+    public function getUsers()
+    {
         $users = User::all();
 
         if (!$users) {
             return response()->json([
                 'status' => false,
                 'message' => 'Users not found',
-                'status_code' => HttpFoundationResponse::HTTP_NOT_FOUND,
+                'status_code' => Response::HTTP_NOT_FOUND,
                 'data' => []
             ]);
-
-        }
-        else {
+        } else {
             return response()->json([
                 'status' => true,
                 'message' => 'Users found',
-                'status_code' => HttpFoundationResponse::HTTP_FOUND,
+                'status_code' => Response::HTTP_FOUND,
                 'data' => $users
+            ]);
+        }
+    }
+
+    public function logout()
+    {
+
+        try {
+            Auth::logout();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User logged out successfully!!!',
+                'status_code' => Response::HTTP_OK,
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ]);
         }
     }

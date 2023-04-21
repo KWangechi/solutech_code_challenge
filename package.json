@@ -17,8 +17,10 @@
     "dependencies": {
         "@smartweb/vue-flash-message": "^1.0.0-alpha.12",
         "@vitejs/plugin-vue": "^4.1.0",
+        "@vueuse/core": "^10.0.2",
         "lodash": "^4.17.21",
         "pinia": "^2.0.34",
+        "v-pagination-3": "^0.1.7",
         "vue": "^3.2.36",
         "vue-loader": "^17.0.1",
         "vue-router": "^4.1.6",
