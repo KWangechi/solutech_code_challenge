@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\RegisterUserController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserTaskController;
+use App\Models\UserTask;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/login', [RegisterUserController::class, 'loginUser'])->name('user.login');
 
     Route::get('auth/logout', [RegisterUserController::class, 'logout'])->name('user.logout');
+
+    Route::get('/taskUsers', [UserTaskController::class, 'taskUsers'])->name('task.users');
 
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -44,6 +47,7 @@ Route::prefix('v1')->group(function () {
         Route::post('tasks', [TaskController::class, 'store']);
         Route::patch('tasks/{id}', [TaskController::class, 'update']);
         Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
+
 
         // User Tasks CRUD
         // Route::apiResource('/v1/status', UserTaskController::class);

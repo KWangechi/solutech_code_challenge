@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\UserTask;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -167,5 +168,24 @@ class UserTaskController extends Controller
                 'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
+    }
+
+    public function taskUsers() {
+        // $task = UserTask::where('task_id', $task_id)->get();
+
+        $lastWeekTasks = UserTask::select('created_at')
+                        ->where('due_date', '>', now()->subWeek()->startOfWeek())
+                        ->where('due_date', '<', now()->subWeek()->endOfWeek())
+                        ->count();
+
+        // $users = User::all();
+
+        // $taskUsers = UserTask::all();
+
+        // dd($taskUsers);
+        // // dd('Random Shit');
+        // dd($task);
+        dd($lastWeekTasks);
+
     }
 }
