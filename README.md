@@ -1,66 +1,64 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Cloning the Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Clone the project in the Code Tab of the respository
 
-## About Laravel
+ > `git clone https://github.com/KWangechi/solutech_code_challenge.git`
+ 
+ ## Setting Up the Project
+ 
+ - After cloning the Project, update composer using the following command: but first make sure you have composer installed first
+ 
+>  `composer update`
+ 
+ - Remember to define your environmental variables by copying the `.env.example` file into your own `.env` file
+ > `cp .env.example .env`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ 
+- Next, install the npm packages since the project using Vue JS as the frontend framework
+ 
+> `npm install`
+ 
+- Seed the database and migrate the table
+> `php artisan migrate --seed`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Run the Laravel app
+> `php artisan serve`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Run the frontend(Vue)
+> `npm run dev`
 
-## Learning Laravel
+# Demo Example
+## Login
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Login![Login_Page](https://user-images.githubusercontent.com/54848316/233610074-0a715f77-9d11-47be-8b42-e13a9468bfa9.PNG)
+- One is redirected to this page since authentication is required
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Login with errors![Login_Error](https://user-images.githubusercontent.com/54848316/233610202-86080b6b-dcb5-4dde-ad0d-4bee4054a556.PNG)
+- This is shown when there is a login error
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Successful Login![DashBoard_After_Login](https://user-images.githubusercontent.com/54848316/233610800-514cabc2-c7b4-4a47-a8b3-7c01aa433b0f.PNG)
+- On successful login, the user is redirected to the dashboard page
 
-## Laravel Sponsors
+## Status CRUD
+![Status_Table](https://user-images.githubusercontent.com/54848316/233611040-94b41e55-6cbf-416d-9b83-533d4767510d.PNG)
+- Showing all the task status tables
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+![Creating a New Status](https://user-images.githubusercontent.com/54848316/233611165-761ff6ea-08e4-4d35-b438-34a69e52149a.PNG)
+- Creating a new Task status using a modal
 
-### Premium Partners
+![Edit_Status_Page](https://user-images.githubusercontent.com/54848316/233611543-b2a36918-baaa-4b9b-8e59-8d1c643ccd25.PNG)
+- Editing a Task Status
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+![Succesful Updates](https://user-images.githubusercontent.com/54848316/233611619-368cf4fe-cc37-4e77-90be-3936bdb78156.PNG)
+- Succesful updates for the Task Status
 
-## Contributing
+![Status_Deletion_Alert](https://user-images.githubusercontent.com/54848316/233611745-152e09a3-92e6-47ef-add3-90b62ace3f0f.PNG)
+- Confirmation of deleteing a task status
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+![Successful_Status_Deletion](https://user-images.githubusercontent.com/54848316/233611945-5e6e7b7e-ac35-44f5-a643-e37af0e62f77.PNG)
+- When the task is deleted successfully
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
