@@ -106,12 +106,15 @@ class RegisterUserController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
 
-        try {
-            Auth::logout();
+        // dd($request->user()->tokens());
 
+        try {
+            $request->user()->tokens()->delete();
+            // Auth::logout();
+            
             return response()->json([
                 'status' => true,
                 'message' => 'User logged out successfully!!!',

@@ -12,6 +12,8 @@ import { createPinia } from "pinia";
 import Router from "@/router";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { toast } from "vue3-toastify";
+
 
 
 

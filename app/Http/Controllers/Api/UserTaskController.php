@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -170,13 +171,14 @@ class UserTaskController extends Controller
         }
     }
 
-    public function taskUsers() {
+    public function taskUsers()
+    {
         // $task = UserTask::where('task_id', $task_id)->get();
 
-        $lastWeekTasks = UserTask::select('created_at')
-                        ->where('due_date', '>', now()->subWeek()->startOfWeek())
-                        ->where('due_date', '<', now()->subWeek()->endOfWeek())
-                        ->count();
+        // $lastWeekTasks = UserTask::select('created_at')
+        //                 ->where('due_date', '>', now()->subWeek()->startOfWeek())
+        //                 ->where('due_date', '<', now()->subWeek()->endOfWeek())
+        //                 ->count();
 
         // $users = User::all();
 
@@ -185,7 +187,15 @@ class UserTaskController extends Controller
         // dd($taskUsers);
         // // dd('Random Shit');
         // dd($task);
-        dd($lastWeekTasks);
+        // dd($lastWeekTasks);
 
+        $usersWithMoreThanOneTask = DB::table('users')
+            ->join('user_tasks', 'users.id', '=', 'user_tasks.user_id')
+            ->select('users.id', DB::raw('count(user_tasks.task_id) as num_tasks'))
+            ->groupBy('users.id')
+            ->havingRaw('count(user_tasks.task_id) = 1')
+            ->get();
+
+        dd($usersWithMoreThanOneTask);
     }
 }

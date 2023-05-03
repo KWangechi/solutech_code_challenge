@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { useUsers } from "../../store/users";
 
 const userStore = useUsers();
@@ -39,17 +39,13 @@ export default {
         })
   },
   mounted() {
-    console.log(userStore.getLoggedInUser());
+    userStore.getLoggedInUser();
     this.getAllUsers();
   },
   methods: {
-    logout() {
-      console.log("Logout the user");
-    },
-    async getAllUsers() {
-      this.users = await userStore.fetchAllUsers();
-      console.log(this.users);
-    },
+    ...mapActions(useUsers, {
+        getAllUsers: 'fetchAllUsers'
+    })
   },
 };
 </script>

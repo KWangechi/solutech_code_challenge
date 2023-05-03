@@ -57,7 +57,7 @@
               <router-link active-class="active-link" class="nav-link" :to="{ name: 'user_tasks' }"
                 >Reports <span class="sr-only"></span
               >
-              
+
               </router-link>
             </li>
 
@@ -105,22 +105,16 @@ export default {
   data() {
     return {
       user: userStore.getUser,
-      users: [],
+    //   users: [],
     };
   },
 
   created() {
-    console.log(userStore.getLoggedInUser());
-    this.getAllUsers();
+    userStore.getLoggedInUser();
   },
   methods: {
     logout() {
       userStore.logoutUser();
-    },
-    async getAllUsers() {
-      // userStore.fetchAllUsers();
-      this.users = await userStore.fetchAllUsers();
-      console.log(this.users);
     },
   },
 };
