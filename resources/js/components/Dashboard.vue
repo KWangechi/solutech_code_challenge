@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useUsers } from "../store/users";
 
 const userStore = useUsers();
@@ -104,15 +104,30 @@ const userStore = useUsers();
 export default {
   data() {
     return {
-      user: userStore.getUser,
-    //   users: [],
     };
   },
 
-  created() {
-    userStore.getLoggedInUser();
+  computed: {
+    ...mapState(useUsers, {
+        user: 'getUser'
+    })
+  },
+
+  mounted() {
+    console.log(this.user);
+
+    // this.user = userStore.getUser;
+    userStore.getLoggedInUser()
+
+    console.log(this.user);
+
+
   },
   methods: {
+    ...mapActions(useUsers, {
+        getUser: 'getLoggedInUser'
+    }),
+
     logout() {
       userStore.logoutUser();
     },

@@ -14,10 +14,13 @@ import 'bootstrap';
 import axios from 'axios';
 window.axios = axios;
 
+console.log(localStorage.getItem('auth_token'))
+
 const authToken = localStorage.getItem('auth_token');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-window.axios.defaults.withCredentials = true
+
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+// axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+// axios.defaults.withCredentials = true
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

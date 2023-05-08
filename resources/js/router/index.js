@@ -54,7 +54,7 @@ const routes = [
     },
     {
         name: "dashboard",
-        path: "/dashboard",
+        path: "/",
         component: Dashboard,
         meta: {
             title: `Users Dashboard`,
@@ -62,13 +62,13 @@ const routes = [
         children: [
             {
                 name: "users",
-                path: "/users",
+                path: "users",
                 component: Users,
             },
 
             {
                 name: "status",
-                path: "/status",
+                path: "status",
                 component: StatusIndex,
                 children: [
                 ],
@@ -79,12 +79,12 @@ const routes = [
             },
             {
                 name: "status_edit",
-                path: "/status/edit/:id",
+                path: "status/edit/:id",
                 component: StatusEdit
             },
             {
                 name: "tasks",
-                path: "/tasks",
+                path: "tasks",
                 component: Task,
                 children: [],
 
@@ -94,12 +94,12 @@ const routes = [
             },
             {
                 name: "tasks_edit",
-                path: "/task/edit/:id",
+                path: "task/edit/:id",
                 component: TaskEdit
             },
             {
                 name: "user_tasks",
-                path: "/user_tasks",
+                path: "user_tasks",
                 component: UserTask,
                 children: [
 
@@ -119,27 +119,33 @@ const router = createRouter({
     routes,
 });
 
-// protect the dashboard and example component pages
-router.beforeEach((to, from, next) => {
-    const useStore = useUsers();
+  router.beforeEach((to, from, next) => {
+    const isLoggedIn = () => {
+        return localStorage.getItem('auth_token')
+    }
     const authToken = localStorage.getItem('auth_token');
 
     document.title = to.meta.title;
 
-    console.log(authToken);
+    console.log(authToken)
 
-    if (to.meta.middleware == "guest") {
-        if (useStore.$state.userAuthenticated) {
-            next({name: 'dashboard'});
-        }
+    console.log(!isLoggedIn());
+
+    if (to.meta.middleware === "guest") {
+      if (authToken !== null) {
+        next({name: 'dashboard'})
+      } else {
         next();
+      }
     } else {
-        if (useStore.$state.userAuthenticated) {
-            next();
-        } else {
-            next({ name: "login" });
-        }
+      if (authToken !== null) {
+        console.log('You can proceed to the next route...')
+        next();
+      } else {
+        console.log("You need to login first")
+        next({ name: "login" });
+      }
     }
-});
+  });
 
 export default router;

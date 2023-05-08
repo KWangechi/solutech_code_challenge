@@ -29,8 +29,10 @@ export const useTasks = defineStore("tasks-store", {
 
     actions: {
         async fetchAllTasks() {
-            await axios.get("/sanctum/csrf-cookie");
-            const response = await axios.get("/api/v1/tasks");
+
+            const response = await axios.get("/api/v1/tasks", {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
             try {
                 this.tasks = response.data.data;
                 return this.tasks;
@@ -42,8 +44,10 @@ export const useTasks = defineStore("tasks-store", {
         },
 
         async createNewTask(task) {
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/api/v1/tasks", task, {});
+            // await axios.get("/sanctum/csrf-cookie");
+            const res = await axios.post("/api/v1/tasks", task, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
 
 
             if (res.data.status) {
@@ -64,9 +68,11 @@ export const useTasks = defineStore("tasks-store", {
         },
 
         async editTask(task) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
-            const response = await axios.get(`/api/v1/task/${task.id}`, {});
+            const response = await axios.get(`/api/v1/task/${task.id}`, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
             if (response.data.status) {
                 this.task = response.data.data;
 
@@ -82,12 +88,14 @@ export const useTasks = defineStore("tasks-store", {
         },
 
         async updateTask(task) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
             const response = await axios.patch(
                 `/api/v1/status/${task.id}`,
                 task,
-                {}
+                {
+                    headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+                }
             );
 
             if (!response.data.status) {
@@ -106,7 +114,7 @@ export const useTasks = defineStore("tasks-store", {
 
 
         async deleteTask(id) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
             Swal.fire({
                 title: 'Task Deletion',
@@ -117,7 +125,9 @@ export const useTasks = defineStore("tasks-store", {
             }).then((result) => {
                 if(result.isConfirmed) {
 
-                    axios.delete(`/api/v1/tasks/${id}`).then((response) => {
+                    axios.delete(`/api/v1/tasks/${id}`, {
+                        headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+                    }).then((response) => {
 
                         console.log(response.data);
 
@@ -141,10 +151,6 @@ export const useTasks = defineStore("tasks-store", {
                 this.fetchAllTasks();
               })
 
-        },
-
-        getLoggedInUser() {
-            return this.user;
         },
     },
 });

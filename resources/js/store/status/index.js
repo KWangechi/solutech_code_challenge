@@ -29,8 +29,10 @@ export const useStatuses = defineStore("status-store", {
 
     actions: {
         async fetchAllStatuses() {
-            await axios.get("/sanctum/csrf-cookie");
-            const response = await axios.get("/api/v1/status");
+            // await axios.get("/sanctum/csrf-cookie");
+            const response = await axios.get("/api/v1/status", {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
             try {
                 this.statuses = response.data.data;
                 return this.statuses;
@@ -42,8 +44,10 @@ export const useStatuses = defineStore("status-store", {
         },
 
         async createNewStatus(status) {
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/api/v1/status", status, {});
+            // await axios.get("/sanctum/csrf-cookie");
+            const res = await axios.post("/api/v1/status", status, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
 
             if (res.data.status) {
                 toast.success(res.data.message, {
@@ -63,9 +67,11 @@ export const useStatuses = defineStore("status-store", {
         },
 
         async editStatus(status) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
-            const response = await axios.get(`/api/v1/status/${status.id}`, {});
+            const response = await axios.get(`/api/v1/status/${status.id}`, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
             if (response.data.status) {
                 this.status = response.data.data;
 
@@ -81,12 +87,14 @@ export const useStatuses = defineStore("status-store", {
         },
 
         async updateStatus(status) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
             const response = await axios.patch(
                 `/api/v1/status/${status.id}`,
                 status,
-                {}
+                {
+                    headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+                }
             );
 
             if (!response.data.status) {
@@ -104,7 +112,7 @@ export const useStatuses = defineStore("status-store", {
         },
 
         async deleteStatus(id) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
             Swal.fire({
                 title: "Status Deletion",
@@ -114,7 +122,9 @@ export const useStatuses = defineStore("status-store", {
                 confirmButtonText: "Yes",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/v1/status/${id}`).then((response) => {
+                    axios.delete(`/api/v1/status/${id}`, {
+                        headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+                    }).then((response) => {
                         console.log(response.data);
 
                         if (!response.data.status) {

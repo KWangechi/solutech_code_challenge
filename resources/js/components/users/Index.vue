@@ -30,7 +30,6 @@ const userStore = useUsers();
 export default {
   data() {
     return {
-      user: userStore.getUser,
     };
   },
   computed: {
@@ -39,7 +38,8 @@ export default {
         })
   },
   mounted() {
-    userStore.getLoggedInUser();
+    console.log(this.users);
+    
     this.getAllUsers();
   },
   methods: {

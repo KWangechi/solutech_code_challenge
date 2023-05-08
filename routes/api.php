@@ -23,11 +23,15 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/register', [RegisterUserController::class, 'createUser'])->name('user.register');
     Route::post('auth/login', [RegisterUserController::class, 'loginUser'])->name('user.login');
 
-
     Route::get('/taskUsers', [UserTaskController::class, 'taskUsers'])->name('task.users');
 
     Route::middleware('auth:sanctum')->group(function () {
+
         Route::post('auth/logout', [RegisterUserController::class, 'logout'])->name('user.logout');
+
+        Route::get('user', function(Request $request) {
+            return $request->user();
+        });
 
         Route::get('users', [RegisterUserController::class, 'getUsers'])->name('user.users');
 
@@ -57,10 +61,3 @@ Route::prefix('v1')->group(function () {
         Route::delete('user_tasks/{id}', [UserTaskController::class, 'destroy']);
     });
 });
-
-
-
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

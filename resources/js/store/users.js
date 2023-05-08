@@ -9,7 +9,7 @@ export const useUsers = defineStore("user-store", {
     state: () => {
         return {
             users: [],
-            user: "",
+            user: {},
             errors: "",
             userAuthenticated: false,
         };
@@ -30,9 +30,12 @@ export const useUsers = defineStore("user-store", {
 
     actions: {
         async fetchAllUsers() {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
-            const response = await axios.get("/api/v1/users");
+            const response = await axios.get("/api/v1/users", {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
+
             try {
                 this.users = response.data.data;
                 return this.users;
@@ -43,8 +46,21 @@ export const useUsers = defineStore("user-store", {
             }
         },
 
+        async getLoggedInUser() {
+            // await axios.get("/sanctum/csrf-cookie");
+
+            let response = await axios.get("/api/v1/user", {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
+
+            this.user = response.data;
+            console.log(this.user);
+
+
+            return this.user;
+        },
+
         async registerUser(user) {
-            await axios.get("/sanctum/csrf-cookie");
             const res = await axios.post("/api/v1/auth/register", user, {});
 
             // use sweetalert to redirect to the next page
@@ -64,18 +80,17 @@ export const useUsers = defineStore("user-store", {
         },
 
         async loginUser(user) {
-            await axios.get("/sanctum/csrf-cookie");
-
-            const res = await axios.post("/api/v1/auth/login", user, {});
+           const res = await axios.post("/api/v1/auth/login", user, {});
 
             if (res.data.status) {
                 this.user = res.data.data;
-
 
                 this.errors = "";
 
                 //store the token also
                 localStorage.setItem("auth_token", res.data.token);
+                localStorage.setItem("userAuthenticated", true);
+
                 this.userAuthenticated = true;
                 console.log(localStorage.getItem("auth_token"));
 
@@ -84,7 +99,7 @@ export const useUsers = defineStore("user-store", {
                 console.log(this.user);
 
                 // redirect to the dashboard page
-                router.push("/dashboard");
+                router.push("/");
             } else {
                 toast.error(res.data.message, {});
 
@@ -92,22 +107,18 @@ export const useUsers = defineStore("user-store", {
             }
         },
 
-        getLoggedInUser() {
-            // console.log(localStorage.getItem("auth_token"));
-            console.log(this.user);
-
-            return this.user;
-        },
-
         async logoutUser() {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
-            const res = await axios.post("/api/v1/auth/logout", {});
+            const res = await axios.post("/api/v1/auth/logout", {}, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
 
             if (res.data.status) {
                 this.user = "";
                 this.userAuthenticated = false;
                 localStorage.removeItem("auth_token");
+                localStorage.removeItem("userAuthenticated");
 
                 toast.success(res.data.message, {});
 
@@ -116,7 +127,7 @@ export const useUsers = defineStore("user-store", {
                 console.log(localStorage.getItem("auth_token"));
 
                 // redirect to the dashboard page
-                router.push("/login");
+                router.replace("/login");
             } else {
                 toast.error(res.data.message, {});
 

@@ -29,8 +29,10 @@ export const useUserTasks = defineStore("user-tasks-store", {
 
     actions: {
         async fetchAllUserTasks() {
-            await axios.get("/sanctum/csrf-cookie");
-            const response = await axios.get("/api/v1/user_tasks");
+            // await axios.get("/sanctum/csrf-cookie");
+            const response = await axios.get("/api/v1/user_tasks", {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
             try {
                 this.userTasks = response.data.data;
                 return this.userTasks;
@@ -42,8 +44,10 @@ export const useUserTasks = defineStore("user-tasks-store", {
         },
 
         async createNewUserTask(user_task) {
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/api/v1/user_tasks", user_task, {});
+            // await axios.get("/sanctum/csrf-cookie");
+            const res = await axios.post("/api/v1/user_tasks", user_task, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+            });
 
             if (res.data.status) {
                 toast.success(res.data.message, {
@@ -63,7 +67,7 @@ export const useUserTasks = defineStore("user-tasks-store", {
         },
 
         async deleteUserTask(id) {
-            await axios.get("/sanctum/csrf-cookie");
+            // await axios.get("/sanctum/csrf-cookie");
 
             Swal.fire({
                 title: 'User Task Deletion',
@@ -74,7 +78,9 @@ export const useUserTasks = defineStore("user-tasks-store", {
             }).then((result) => {
                 if(result.isConfirmed) {
 
-                    axios.delete(`/api/v1/user_tasks/${id}`).then((response) => {
+                    axios.delete(`/api/v1/user_tasks/${id}`, {
+                        headers: {Authorization: `Bearer ${localStorage.getItem('auth_token')}`}
+                    }).then((response) => {
 
                         console.log(response.data);
 
@@ -95,13 +101,8 @@ export const useUserTasks = defineStore("user-tasks-store", {
 
                 }
 
-                this.fetchAllTasks();
+                this.fetchAllUserTasks();
               })
-
-        },
-
-        getLoggedInUser() {
-            return this.user;
         },
     },
 });
